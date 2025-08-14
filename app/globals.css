@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md;
+  }
+  
+  .btn-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 dark:bg-dark-700 dark:hover:bg-dark-600 text-gray-900 dark:text-gray-100 px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-dark-800 rounded-xl shadow-sm border border-gray-200 dark:border-dark-700 p-6 transition-all duration-200;
+  }
+  
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+  }
+
+  /* Enhanced select dropdown styling */
+  .mobile-select {
+    @apply appearance-none bg-white dark:bg-dark-700 border border-gray-300 dark:border-dark-600 rounded-lg px-3 py-3 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 shadow-sm font-medium;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.75rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25em 1.25em;
+    padding-right: 2.75rem;
+    min-height: 44px; /* Better touch target for mobile */
+  }
+
+  .mobile-select:focus {
+    @apply ring-2 ring-primary-500 border-primary-500 shadow-md;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%233457D5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  }
+
+  .mobile-select:hover {
+    @apply border-gray-400 dark:border-dark-500 shadow-sm;
+  }
+
+  /* Style the select options for better mobile experience */
+  .mobile-select option {
+    @apply bg-white dark:bg-dark-700 text-gray-900 dark:text-gray-100 py-2 px-3;
+    font-size: 16px; /* Prevents zoom on iOS */
+    line-height: 1.5;
+  }
+
+  /* Date input specific styling */
+  input[type="date"].mobile-select {
+    @apply relative;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3e%3c/svg%3e");
+  }
+
+  input[type="date"].mobile-select:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%233457D5'%3e%3cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3e%3c/svg%3e");
+  }
+
+  /* Hide default date picker arrow on webkit browsers */
+  input[type="date"].mobile-select::-webkit-calendar-picker-indicator {
+    @apply opacity-0 absolute right-3 cursor-pointer;
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Custom select wrapper for even better control */
+  .custom-select-wrapper {
+    @apply relative;
+  }
+
+  .custom-select-wrapper::after {
+    content: '';
+    @apply absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #6b7280;
+  }
+
+  .custom-select-wrapper:focus-within::after {
+    border-top-color: #3457D5;
+  }
+
+  /* Custom dropdown styling for better mobile experience */
+  .custom-dropdown {
+    @apply bg-white dark:bg-dark-800 border border-gray-200 dark:border-dark-700 rounded-xl shadow-lg backdrop-blur-sm;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  .dropdown-item {
+    @apply w-full flex items-center space-x-3 px-4 py-3 text-sm transition-all duration-150 ease-in-out;
+  }
+
+  .dropdown-item:hover {
+    @apply bg-gray-50 dark:bg-dark-700;
+  }
+
+  .dropdown-item:active {
+    @apply bg-gray-100 dark:bg-dark-600;
+  }
+
+  .dropdown-divider {
+    @apply border-t border-gray-200 dark:border-dark-700 my-1;
+  }
+
+  /* Custom radio button styling for better mobile experience */
+  .custom-radio {
+    @apply appearance-none w-4 h-4 border-2 border-gray-300 dark:border-dark-600 rounded-full bg-white dark:bg-dark-700 cursor-pointer transition-all duration-200;
+  }
+
+  .custom-radio:checked {
+    @apply border-primary-500 bg-primary-500;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .custom-radio:focus {
+    @apply ring-2 ring-primary-500 ring-offset-2;
+  }
+
+  .custom-radio:hover {
+    @apply border-primary-400;
+  }
+
+  /* Radio button labels */
+  .radio-label {
+    @apply flex items-center space-x-3 cursor-pointer p-3 rounded-lg border border-gray-200 dark:border-dark-600 transition-all duration-200 hover:bg-gray-50 dark:hover:bg-dark-700;
+  }
+
+  .radio-label.selected {
+    @apply border-primary-500 bg-primary-50 dark:bg-primary-900/20;
+  }
+
+  .mobile-table {
+    @apply block overflow-x-auto whitespace-nowrap;
+  }
+
+  .mobile-table table {
+    @apply min-w-full;
+  }
+}

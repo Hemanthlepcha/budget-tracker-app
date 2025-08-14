@@ -10,7 +10,7 @@ export const metadata = {
   title: 'Budget & Expense Tracker',
   description: 'Track your income, expenses, and savings goals with beautiful charts and insights',
   manifest: '/manifest.json',
-  themeColor: '#3457D5',
+  metadataBase: new URL('https://budget-tracker-app.vercel.app'),
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -32,6 +32,10 @@ export const metadata = {
       { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
     ],
   },
+}
+
+export const viewport = {
+  themeColor: '#3457D5',
 }
 
 export default function RootLayout({

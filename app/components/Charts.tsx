@@ -64,7 +64,7 @@ export function Charts({ transactions, categories }: ChartsProps) {
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => [`$${value.toFixed(2)}`, 'Amount']} />
+              <Tooltip formatter={(value: number) => [`Nu.${value.toFixed(2)}`, 'Amount']} />
             </PieChart>
           </ResponsiveContainer>
         ) : (
@@ -88,7 +88,7 @@ export function Charts({ transactions, categories }: ChartsProps) {
                 height={80}
               />
               <YAxis />
-              <Tooltip formatter={(value: number) => `$${value.toFixed(2)}`} />
+              <Tooltip formatter={(value: number) => `Nu.${value.toFixed(2)}`} />
               <Bar dataKey="income" fill="#10b981" name="Income" />
               <Bar dataKey="expenses" fill="#ef4444" name="Expenses" />
             </BarChart>

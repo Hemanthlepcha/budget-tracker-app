@@ -20,9 +20,7 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
-  const [showAddCategory, setShowAddCategory] = useState(false)
-  const [newCategoryName, setNewCategoryName] = useState('')
-  const [addingCategory, setAddingCategory] = useState(false)
+  const [isCustomCategory, setIsCustomCategory] = useState(false)
 
   const filteredCategories = categories.filter(cat => cat.type === type)
 
@@ -31,10 +29,16 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
   console.log('Selected type:', type)
   console.log('Filtered categories:', filteredCategories)
 
-  const handleAddCategory = async () => {
-    if (!user || !newCategoryName.trim()) return
+  const createCategoryIfNeeded = async (categoryName: string) => {
+    if (!user || !categoryName.trim()) return false
 
-    setAddingCategory(true)
+    // Check if category already exists
+    const existingCategory = categories.find(
+      cat => cat.name.toLowerCase() === categoryName.toLowerCase() && cat.type === type
+    )
+    
+    if (existingCategory) return true // Category exists, no need to create
+
     try {
       const maxOrder = Math.max(...categories.filter(c => c.type === type).map(c => c.order), 0)
       
@@ -42,25 +46,17 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
         .from('categories')
         .insert({
           user_id: user.id,
-          name: newCategoryName.trim(),
+          name: categoryName.trim(),
           type: type,
           color: type === 'income' ? '#10b981' : '#ef4444',
           order: maxOrder + 1,
         })
 
       if (error) throw error
-      
-      // Set the newly created category as selected
-      setCategory(newCategoryName.trim())
-      setNewCategoryName('')
-      setShowAddCategory(false)
-      
-      // Refresh categories
-      onSuccess()
+      return true
     } catch (error) {
-      console.error('Error adding category:', error)
-    } finally {
-      setAddingCategory(false)
+      console.error('Error creating category:', error)
+      return false
     }
   }
 
@@ -70,12 +66,19 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
 
     setLoading(true)
     try {
+      // First, create category if it doesn't exist
+      const categoryCreated = await createCategoryIfNeeded(category)
+      if (!categoryCreated) {
+        throw new Error('Failed to create category')
+      }
+
+      // Then create the transaction
       const { error } = await supabase
         .from('transactions')
         .insert({
           user_id: user.id,
           amount: parseFloat(amount),
-          category,
+          category: category.trim(),
           type,
           date,
           notes: notes || null,
@@ -146,93 +149,91 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
           </div>
 
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-sm font-medium">Category</label>
-              <button
-                type="button"
-                onClick={() => setShowAddCategory(!showAddCategory)}
-                className="text-xs text-primary-600 hover:text-primary-700 font-medium"
-              >
-                {showAddCategory ? 'Cancel' : '+ Add New'}
-              </button>
-            </div>
-
-            {showAddCategory ? (
-              // Inline Add Category Form
-              <div className="space-y-3 p-3 bg-gray-50 dark:bg-dark-700 rounded-lg border border-gray-200 dark:border-dark-600">
-                <div>
-                  <label className="block text-xs font-medium mb-1 text-gray-600 dark:text-gray-400">
-                    New {type} category name
-                  </label>
-                  <input
-                    type="text"
-                    value={newCategoryName}
-                    onChange={(e) => setNewCategoryName(e.target.value)}
-                    className="input text-sm"
-                    placeholder={`Enter ${type} category name`}
-                    onKeyPress={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault()
-                        handleAddCategory()
-                      }
-                    }}
-                  />
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    type="button"
-                    onClick={handleAddCategory}
-                    disabled={!newCategoryName.trim() || addingCategory}
-                    className="btn-primary text-xs px-3 py-1 flex-1"
-                  >
-                    {addingCategory ? 'Adding...' : 'Add Category'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowAddCategory(false)
-                      setNewCategoryName('')
-                    }}
-                    className="btn-secondary text-xs px-3 py-1 flex-1"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              // Regular Category Selection
-              <>
+            <label className="block text-sm font-medium mb-2">Category</label>
+            
+            {/* Show dropdown if categories exist, otherwise show input */}
+            {filteredCategories.length > 0 ? (
+              <div className="space-y-2">
                 <select
                   value={category}
                   onChange={(e) => {
-                    if (e.target.value === '__add_new__') {
-                      setShowAddCategory(true)
+                    if (e.target.value === '__custom__') {
+                      setIsCustomCategory(true)
+                      setCategory('')
                     } else {
+                      setIsCustomCategory(false)
                       setCategory(e.target.value)
                     }
                   }}
                   className="mobile-select w-full"
-                  required
+                  required={!isCustomCategory}
                 >
-                  <option value="">Select a category</option>
+                  <option value="">Select existing category</option>
                   {filteredCategories.map((cat) => (
                     <option key={cat.id} value={cat.name}>
                       {cat.name}
                     </option>
                   ))}
-                  <option value="__add_new__" className="text-primary-600 font-medium">
-                    + Add New {type} Category
+                  <option value="__custom__" className="text-primary-600 font-medium">
+                    ✏️ Type new category
                   </option>
                 </select>
                 
-                {filteredCategories.length === 0 && (
-                  <div className="mt-2 p-3 bg-blue-50 dark:bg-primary-900/20 rounded-lg border border-blue-200 dark:border-primary-700/50">
-                    <p className="text-sm text-primary-700 dark:text-primary-300">
-                      No {type} categories yet. Click "+ Add New" to create your first {type} category!
-                    </p>
+                {/* Custom category input when user selects "Type new category" */}
+                {isCustomCategory && (
+                  <div className="space-y-2">
+                    <input
+                      type="text"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      className="input w-full"
+                      placeholder={`Enter new ${type} category name`}
+                      required
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsCustomCategory(false)
+                        setCategory('')
+                      }}
+                      className="text-xs text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                    >
+                      ← Back to existing categories
+                    </button>
                   </div>
                 )}
-              </>
+              </div>
+            ) : (
+              /* No categories exist - show input directly */
+              <input
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="input w-full"
+                placeholder={`Enter ${type} category name`}
+                required
+              />
+            )}
+            
+            {/* Helpful messages */}
+            {filteredCategories.length === 0 && (
+              <div className="mt-2 p-3 bg-blue-50 dark:bg-primary-900/20 rounded-lg border border-blue-200 dark:border-primary-700/50">
+                <p className="text-sm text-primary-700 dark:text-primary-300">
+                  💡 No {type} categories yet. Type a category name and it will be created automatically!
+                </p>
+              </div>
+            )}
+            
+            {/* Show "new category will be created" message */}
+            {category && 
+             (isCustomCategory || filteredCategories.length === 0) && 
+             !filteredCategories.some(cat => cat.name.toLowerCase() === category.toLowerCase()) && (
+              <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700/50">
+                <p className="text-xs text-green-700 dark:text-green-300">
+                  ✨ New category "{category}" will be created
+                </p>
+              </div>
             )}
           </div>
 

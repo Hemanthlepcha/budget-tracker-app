@@ -20,6 +20,9 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
   const [date, setDate] = useState(format(new Date(), 'yyyy-MM-dd'))
   const [notes, setNotes] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showAddCategory, setShowAddCategory] = useState(false)
+  const [newCategoryName, setNewCategoryName] = useState('')
+  const [addingCategory, setAddingCategory] = useState(false)
 
   const filteredCategories = categories.filter(cat => cat.type === type)
 
@@ -27,6 +30,39 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
   console.log('All categories:', categories)
   console.log('Selected type:', type)
   console.log('Filtered categories:', filteredCategories)
+
+  const handleAddCategory = async () => {
+    if (!user || !newCategoryName.trim()) return
+
+    setAddingCategory(true)
+    try {
+      const maxOrder = Math.max(...categories.filter(c => c.type === type).map(c => c.order), 0)
+      
+      const { error } = await supabase
+        .from('categories')
+        .insert({
+          user_id: user.id,
+          name: newCategoryName.trim(),
+          type: type,
+          color: type === 'income' ? '#10b981' : '#ef4444',
+          order: maxOrder + 1,
+        })
+
+      if (error) throw error
+      
+      // Set the newly created category as selected
+      setCategory(newCategoryName.trim())
+      setNewCategoryName('')
+      setShowAddCategory(false)
+      
+      // Refresh categories
+      onSuccess()
+    } catch (error) {
+      console.error('Error adding category:', error)
+    } finally {
+      setAddingCategory(false)
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -114,33 +150,89 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
               <label className="block text-sm font-medium">Category</label>
               <button
                 type="button"
-                onClick={onSuccess}
-                className="text-xs text-primary-600 hover:text-primary-700"
+                onClick={() => setShowAddCategory(!showAddCategory)}
+                className="text-xs text-primary-600 hover:text-primary-700 font-medium"
               >
-                Refresh Categories
+                {showAddCategory ? 'Cancel' : '+ Add New'}
               </button>
             </div>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="mobile-select w-full"
-              required
-            >
-              <option value="">Select a category</option>
-              {filteredCategories.length === 0 ? (
-                <option value="" disabled>No {type} categories found</option>
-              ) : (
-                filteredCategories.map((cat) => (
-                  <option key={cat.id} value={cat.name}>
-                    {cat.name}
+
+            {showAddCategory ? (
+              // Inline Add Category Form
+              <div className="space-y-3 p-3 bg-gray-50 dark:bg-dark-700 rounded-lg border border-gray-200 dark:border-dark-600">
+                <div>
+                  <label className="block text-xs font-medium mb-1 text-gray-600 dark:text-gray-400">
+                    New {type} category name
+                  </label>
+                  <input
+                    type="text"
+                    value={newCategoryName}
+                    onChange={(e) => setNewCategoryName(e.target.value)}
+                    className="input text-sm"
+                    placeholder={`Enter ${type} category name`}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault()
+                        handleAddCategory()
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex space-x-2">
+                  <button
+                    type="button"
+                    onClick={handleAddCategory}
+                    disabled={!newCategoryName.trim() || addingCategory}
+                    className="btn-primary text-xs px-3 py-1 flex-1"
+                  >
+                    {addingCategory ? 'Adding...' : 'Add Category'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddCategory(false)
+                      setNewCategoryName('')
+                    }}
+                    className="btn-secondary text-xs px-3 py-1 flex-1"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              // Regular Category Selection
+              <>
+                <select
+                  value={category}
+                  onChange={(e) => {
+                    if (e.target.value === '__add_new__') {
+                      setShowAddCategory(true)
+                    } else {
+                      setCategory(e.target.value)
+                    }
+                  }}
+                  className="mobile-select w-full"
+                  required
+                >
+                  <option value="">Select a category</option>
+                  {filteredCategories.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))}
+                  <option value="__add_new__" className="text-primary-600 font-medium">
+                    + Add New {type} Category
                   </option>
-                ))
-              )}
-            </select>
-            {filteredCategories.length === 0 && (
-              <p className="text-sm text-red-600 mt-1">
-                No {type} categories available. Please add some categories first.
-              </p>
+                </select>
+                
+                {filteredCategories.length === 0 && (
+                  <div className="mt-2 p-3 bg-blue-50 dark:bg-primary-900/20 rounded-lg border border-blue-200 dark:border-primary-700/50">
+                    <p className="text-sm text-primary-700 dark:text-primary-300">
+                      No {type} categories yet. Click "+ Add New" to create your first {type} category!
+                    </p>
+                  </div>
+                )}
+              </>
             )}
           </div>
 

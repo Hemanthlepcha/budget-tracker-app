@@ -132,15 +132,32 @@ export function Dashboard() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Mobile/Tablet Layout: Summary Cards First */}
+        <div className="block lg:hidden space-y-6">
+          {/* 1. Summary Cards - Always First on Mobile/Tablet */}
+          <SummaryCards transactions={transactions} />
+          
+          {/* 2. Savings Goal - Second on Mobile/Tablet */}
+          <SavingsGoalCard
+            savingsGoal={savingsGoal}
+            transactions={transactions}
+            onUpdate={loadData}
+          />
+          
+          {/* 3. Charts - Third on Mobile/Tablet */}
+          <Charts transactions={transactions} categories={categories} />
+        </div>
+
+        {/* Desktop Layout: Side-by-side */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-8">
           {/* Left Column - Summary and Charts */}
-          <div className="lg:col-span-2 space-y-6 lg:space-y-8">
+          <div className="lg:col-span-2 space-y-8">
             <SummaryCards transactions={transactions} />
             <Charts transactions={transactions} categories={categories} />
           </div>
 
           {/* Right Column - Savings Goal */}
-          <div className="order-first lg:order-last">
+          <div>
             <SavingsGoalCard
               savingsGoal={savingsGoal}
               transactions={transactions}
@@ -149,7 +166,7 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* Transactions Table */}
+        {/* Transactions Table - Always Last */}
         <div className="mt-6 lg:mt-8">
           <TransactionTable
             transactions={transactions}

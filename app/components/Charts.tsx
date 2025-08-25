@@ -30,7 +30,7 @@ export function Charts({ transactions, categories }: ChartsProps) {
     const income = transactions
       .filter(t => t.type === 'income' && t.category === category.name)
       .reduce((sum, t) => sum + t.amount, 0)
-    
+
     const expenses = transactions
       .filter(t => t.type === 'expense' && t.category === category.name)
       .reduce((sum, t) => sum + t.amount, 0)
@@ -81,8 +81,8 @@ export function Charts({ transactions, categories }: ChartsProps) {
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={categoryTotals}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis 
-                dataKey="category" 
+              <XAxis
+                dataKey="category"
                 angle={-45}
                 textAnchor="end"
                 height={80}

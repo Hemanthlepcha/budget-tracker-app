@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { supabase, type UserProfile } from '../../lib/supabase'
 import { useSupabase } from './SupabaseProvider'
 import { useTheme } from './ThemeProvider'
+import { WhatsAppIntegration } from './WhatsAppIntegration'
 import { Settings, LogOut, Camera, Palette, FolderOpen, Sun, Moon } from 'lucide-react'
 
 interface UserProfileProps {
@@ -160,7 +161,7 @@ export function UserProfile({ onSignOut, onShowCategoryManager }: UserProfilePro
 
             {/* Divider */}
             <div className="dropdown-divider"></div>
-            
+
             <button
               onClick={() => {
                 onShowCategoryManager()
@@ -171,7 +172,7 @@ export function UserProfile({ onSignOut, onShowCategoryManager }: UserProfilePro
               <FolderOpen className="h-4 w-4" />
               <span>Manage Categories</span>
             </button>
-            
+
             <button
               onClick={() => {
                 toggleTheme()
@@ -194,7 +195,7 @@ export function UserProfile({ onSignOut, onShowCategoryManager }: UserProfilePro
 
             {/* Divider */}
             <div className="dropdown-divider"></div>
-            
+
             <button
               onClick={() => {
                 onSignOut()
@@ -269,10 +270,8 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
       if (error) throw error
 
       setMessage('Profile updated successfully!')
-      setTimeout(() => {
-        onUpdate()
-        onClose()
-      }, 1500)
+      // Update profile data without closing modal
+      onUpdate()
     } catch (error: any) {
       setMessage(error.message)
     } finally {
@@ -289,7 +288,7 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
       // For now, we'll use a placeholder or initials
       // TODO: Implement actual file upload when storage bucket is set up
       setMessage('Avatar upload feature coming soon! Using initials for now.')
-      
+
       // You can implement actual upload here once storage is configured:
       /*
       const fileExt = file.name.split('.').pop()
@@ -328,6 +327,11 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
     }
   }
 
+  // Separate handler for WhatsApp updates that doesn't close the modal
+  const handleWhatsAppUpdate = () => {
+    onUpdate()
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="card w-full max-w-md max-h-[90vh] overflow-y-auto">
@@ -341,6 +345,7 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
           </button>
         </div>
 
+        {/* Profile Form Section */}
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Avatar Section */}
           <div className="text-center">
@@ -402,32 +407,40 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
           </div>
 
           {message && (
-            <div className={`p-3 rounded-lg text-sm ${
-              message.includes('error') || message.includes('Error')
+            <div className={`p-3 rounded-lg text-sm ${message.includes('error') || message.includes('Error')
                 ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
                 : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
-            }`}>
+              }`}>
               {message}
             </div>
           )}
 
-          <div className="flex space-x-4 pt-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="btn-secondary flex-1"
-            >
-              Cancel
-            </button>
+          <div className="flex space-x-4">
             <button
               type="submit"
               disabled={loading}
               className="btn-primary flex-1"
             >
-              {loading ? 'Saving...' : 'Save Changes'}
+              {loading ? 'Saving...' : 'Save Profile Changes'}
             </button>
           </div>
         </form>
+
+        {/* WhatsApp Integration Section - Outside of form */}
+        <div className="border-t border-gray-200 dark:border-gray-600 pt-6 mt-6">
+          <WhatsAppIntegration profile={profile} onUpdate={handleWhatsAppUpdate} />
+        </div>
+
+        {/* Close Button */}
+        <div className="flex justify-center pt-6">
+          <button
+            type="button"
+            onClick={onClose}
+            className="btn-secondary px-8"
+          >
+            Close Settings
+          </button>
+        </div>
       </div>
     </div>
   )

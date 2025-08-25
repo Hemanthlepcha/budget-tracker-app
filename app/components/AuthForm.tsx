@@ -38,6 +38,12 @@ export function AuthForm() {
                     throw new Error('Username is already taken')
                 }
 
+                console.log('🔍 Attempting signup with:', { 
+                    email, 
+                    redirectTo: `${window.location.origin}/`,
+                    origin: window.location.origin 
+                })
+                
                 const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
@@ -49,10 +55,20 @@ export function AuthForm() {
                         }
                     }
                 })
+                
+                console.log('📧 Signup response:', { 
+                    user: data.user, 
+                    session: data.session,
+                    error: error 
+                })
+                
                 if (error) throw error
 
                 // Create user profile after successful signup
                 if (data.user) {
+                    console.log('👤 Creating profile for user:', data.user.id)
+                    console.log('📧 User email confirmed?', data.user.email_confirmed_at)
+                    
                     const { error: profileError } = await supabase
                         .from('user_profiles')
                         .insert({
@@ -62,11 +78,20 @@ export function AuthForm() {
                         })
 
                     if (profileError) {
-                        console.error('Error creating profile:', profileError)
+                        console.error('❌ Error creating profile:', profileError)
+                    } else {
+                        console.log('✅ Profile created successfully')
                     }
                 }
 
-                setMessage('Check your email for the confirmation link!')
+                // More detailed message based on response
+                if (data.user && !data.user.email_confirmed_at) {
+                    setMessage('✅ Account created! Check your email (including spam folder) for the confirmation link.')
+                } else if (data.user && data.user.email_confirmed_at) {
+                    setMessage('✅ Account created and automatically confirmed! You can now sign in.')
+                } else {
+                    setMessage('Account created. Please check your email for confirmation.')
+                }
             }
         } catch (error: any) {
             setMessage(error.message)

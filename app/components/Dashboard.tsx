@@ -45,7 +45,7 @@ export function Dashboard() {
         .gte('date', format(startDate, 'yyyy-MM-dd'))
         .lte('date', format(endDate, 'yyyy-MM-dd'))
         .order('date', { ascending: false })
-
+      console.log('Loaded transactions:', transactionsData)
       // Load categories
       const { data: categoriesData } = await supabase
         .from('categories')
@@ -136,14 +136,14 @@ export function Dashboard() {
         <div className="block lg:hidden space-y-6">
           {/* 1. Summary Cards - Always First on Mobile/Tablet */}
           <SummaryCards transactions={transactions} />
-          
+
           {/* 2. Savings Goal - Second on Mobile/Tablet */}
           <SavingsGoalCard
             savingsGoal={savingsGoal}
             transactions={transactions}
             onUpdate={loadData}
           />
-          
+
           {/* 3. Charts - Third on Mobile/Tablet */}
           <Charts transactions={transactions} categories={categories} />
         </div>

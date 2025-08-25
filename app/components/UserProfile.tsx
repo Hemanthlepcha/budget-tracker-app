@@ -346,7 +346,7 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
         </div>
 
         {/* Profile Form Section */}
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form id="profileForm" onSubmit={handleSubmit} className="space-y-6">
           {/* Avatar Section */}
           <div className="text-center">
             <div className="relative inline-block">
@@ -408,22 +408,12 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
 
           {message && (
             <div className={`p-3 rounded-lg text-sm ${message.includes('error') || message.includes('Error')
-                ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-                : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
+              ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
+              : 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300'
               }`}>
               {message}
             </div>
           )}
-
-          <div className="flex space-x-4">
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary flex-1"
-            >
-              {loading ? 'Saving...' : 'Save Profile Changes'}
-            </button>
-          </div>
         </form>
 
         {/* WhatsApp Integration Section - Outside of form */}
@@ -431,14 +421,15 @@ function ProfileSettings({ profile, onClose, onUpdate }: ProfileSettingsProps) {
           <WhatsAppIntegration profile={profile} onUpdate={handleWhatsAppUpdate} />
         </div>
 
-        {/* Close Button */}
+        {/* Save Button */}
         <div className="flex justify-center pt-6">
           <button
-            type="button"
-            onClick={onClose}
-            className="btn-secondary px-8"
+            type="submit"
+            form="profileForm"
+            disabled={loading}
+            className="btn-primary px-8"
           >
-            Close Settings
+            {loading ? 'Saving...' : 'Save Profile Changes'}
           </button>
         </div>
       </div>

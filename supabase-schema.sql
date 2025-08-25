@@ -5,6 +5,8 @@ CREATE TABLE user_profiles (
   username TEXT NOT NULL UNIQUE,
   full_name TEXT,
   avatar_url TEXT,
+  phone_number TEXT UNIQUE,
+  whatsapp_enabled BOOLEAN DEFAULT false,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -29,6 +31,8 @@ CREATE TABLE transactions (
   type TEXT CHECK (type IN ('income', 'expense')) NOT NULL,
   date DATE NOT NULL,
   notes TEXT,
+  source TEXT DEFAULT 'manual' CHECK (source IN ('manual', 'whatsapp', 'api')),
+  merchant TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

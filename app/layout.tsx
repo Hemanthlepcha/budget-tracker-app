@@ -27,7 +27,7 @@ export const metadata = {
     description: 'Track your income, expenses, and savings goals with beautiful charts and insights',
   },
   icons: {
-    icon: '/icons/ikon.png',  // ✅ direct path from /public
+    icon: '/icons/icon.png',  // ✅ direct path from /public
     shortcut: '/favicon.ico',
     apple: [
       { url: '/icons/icon-72x72.png', sizes: '72x72', type: 'image/png' },

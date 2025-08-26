@@ -12,6 +12,7 @@ import { SavingsGoalCard } from './SavingsGoalCard'
 import { UserProfile } from './UserProfile'
 import { Plus, BarChart3 } from 'lucide-react'
 import { format, startOfMonth, endOfMonth } from 'date-fns'
+import Image from 'next/image'
 
 export function Dashboard() {
   const { user } = useSupabase()
@@ -90,7 +91,8 @@ export function Dashboard() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <BarChart3 className="h-5 w-5 sm:h-8 sm:w-8 text-primary-500" />
+              {/* <BarChart3 className="h-5 w-5 sm:h-8 sm:w-8 text-primary-500" /> */}
+              <Image src={"/icons/ikon.png"} alt="Logo" width={30} height={30} />
               <h1 className="text-sm sm:text-xl font-semibold">Budget Tracker</h1>
             </div>
 

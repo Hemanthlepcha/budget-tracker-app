@@ -178,8 +178,7 @@ temp/
 *.old
 
 # Generated icons (since they can be regenerated)
-/public/icons/
-/public/screenshots/
+
 
 # PWA generated files that can be recreated
 /public/sw.js.map

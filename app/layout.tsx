@@ -3,11 +3,12 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from './components/ThemeProvider'
 import { SupabaseProvider } from './components/SupabaseProvider'
 import { PWAInstaller } from './components/PWAInstaller'
-
+import { icons } from 'lucide-react'
+import icon from "../public/icons/icon-72x72.png"
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Budget & Expense Tracker',
+  title: 'Budgetracker',
   description: 'Track your income, expenses, and savings goals with beautiful charts and insights',
   manifest: '/manifest.json',
   metadataBase: new URL('https://budget-tracker-app.vercel.app'),
@@ -26,12 +27,13 @@ export const metadata = {
     description: 'Track your income, expenses, and savings goals with beautiful charts and insights',
   },
   icons: {
+    icon: '/icons/ikon.png',  // ✅ direct path from /public
     shortcut: '/favicon.ico',
     apple: [
-      { url: '/icons/icon-152x152.png', sizes: '152x152', type: 'image/png' },
-      { url: '/icons/icon-192x192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icons/icon-72x72.png', sizes: '72x72', type: 'image/png' },
     ],
   },
+
 }
 
 export const viewport = {

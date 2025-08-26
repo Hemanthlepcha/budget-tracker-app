@@ -92,7 +92,7 @@ export function Dashboard() {
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-2 sm:space-x-4">
               {/* <BarChart3 className="h-5 w-5 sm:h-8 sm:w-8 text-primary-500" /> */}
-              <Image src={"/icons/icon.png"} alt="Logo" width={30} height={30} />
+              <Image src={"/icons/icon.png"} alt="Logo" width={24} height={20} />
               <h1 className="text-sm sm:text-xl font-semibold">Budget Tracker</h1>
             </div>
 

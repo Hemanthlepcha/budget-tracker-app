@@ -472,25 +472,6 @@ The system handles various phone number formats:
 - Ensure mobile responsiveness
 - Test WhatsApp integration thoroughly
 
-## 📈 Future Roadmap
-
-### **Short Term (Next 3 months)**
-- [ ] **Receipt Photo Upload**: Direct photo upload in web app
-- [ ] **Expense Reports**: PDF export functionality
-- [ ] **Budget Alerts**: Spending limit notifications
-- [ ] **Multi-currency Support**: Support for USD, INR, etc.
-
-### **Medium Term (6 months)**
-- [ ] **Bank API Integration**: Direct bank account linking
-- [ ] **Investment Tracking**: Stocks, mutual funds tracking
-- [ ] **Family Sharing**: Shared budgets and expenses
-- [ ] **Advanced Analytics**: AI-powered spending insights
-
-### **Long Term (1 year)**
-- [ ] **Voice Commands**: "Hey Budget, add expense..."
-- [ ] **Smart Predictions**: Predict future expenses
-- [ ] **Financial Goals**: Long-term savings planning
-- [ ] **Mobile Apps**: Native iOS and Android apps
 
 ## 🐛 Troubleshooting
 

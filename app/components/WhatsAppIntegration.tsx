@@ -230,8 +230,8 @@ export function WhatsAppIntegration({ profile, onUpdate }: WhatsAppIntegrationPr
                                 </button>
                             </div>
                             <div className="text-xs text-gray-500 dark:text-gray-400 space-y-1">
-                                <p>✅ Bhutan: +975 17123456 or just 17123456</p>
-                                <p>✅ International: +1234567890</p>
+                                <p>Bhutan: +975 17123456 or just 17123456</p>
+                                <p>International: +1234567890</p>
                             </div>
                         </div>
                     </div>

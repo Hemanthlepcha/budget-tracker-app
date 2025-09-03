@@ -36,12 +36,12 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
     const existingCategory = categories.find(
       cat => cat.name.toLowerCase() === categoryName.toLowerCase() && cat.type === type
     )
-    
+
     if (existingCategory) return true // Category exists, no need to create
 
     try {
       const maxOrder = Math.max(...categories.filter(c => c.type === type).map(c => c.order), 0)
-      
+
       const { error } = await supabase
         .from('categories')
         .insert({
@@ -85,7 +85,7 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
         })
 
       if (error) throw error
-      
+
       onSuccess()
       onClose()
     } catch (error) {
@@ -150,7 +150,7 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
 
           <div>
             <label className="block text-sm font-medium mb-2">Category</label>
-            
+
             {/* Show dropdown if categories exist, otherwise show input */}
             {filteredCategories.length > 0 ? (
               <div className="space-y-2">
@@ -178,7 +178,7 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
                     ✏️ Type new category
                   </option>
                 </select>
-                
+
                 {/* Custom category input when user selects "Type new category" */}
                 {isCustomCategory && (
                   <div className="space-y-2">
@@ -215,7 +215,7 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
                 required
               />
             )}
-            
+
             {/* Helpful messages */}
             {filteredCategories.length === 0 && (
               <div className="mt-2 p-3 bg-blue-50 dark:bg-primary-900/20 rounded-lg border border-blue-200 dark:border-primary-700/50">
@@ -224,17 +224,17 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
                 </p>
               </div>
             )}
-            
+
             {/* Show "new category will be created" message */}
-            {category && 
-             (isCustomCategory || filteredCategories.length === 0) && 
-             !filteredCategories.some(cat => cat.name.toLowerCase() === category.toLowerCase()) && (
-              <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700/50">
-                <p className="text-xs text-green-700 dark:text-green-300">
-                  ✨ New category "{category}" will be created
-                </p>
-              </div>
-            )}
+            {category &&
+              (isCustomCategory || filteredCategories.length === 0) &&
+              !filteredCategories.some(cat => cat.name.toLowerCase() === category.toLowerCase()) && (
+                <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-700/50">
+                  <p className="text-xs text-green-700 dark:text-green-300">
+                    ✨ New category "{category}" will be created
+                  </p>
+                </div>
+              )}
           </div>
 
           <div>
@@ -272,7 +272,7 @@ export function TransactionForm({ categories, onClose, onSuccess }: TransactionF
               disabled={loading}
               className="btn-primary flex-1"
             >
-              {loading ? 'Adding...' : 'Add Transaction'}
+              {loading ? 'Adding...' : 'Add '}
             </button>
           </div>
         </form>

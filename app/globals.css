@@ -6,7 +6,7 @@
   html {
     @apply scroll-smooth;
   }
-  
+
   body {
     @apply bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100 transition-colors;
   }
@@ -16,15 +16,15 @@
   .btn-primary {
     @apply bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 shadow-sm hover:shadow-md;
   }
-  
+
   .btn-secondary {
     @apply bg-gray-200 hover:bg-gray-300 dark:bg-dark-700 dark:hover:bg-dark-600 text-gray-900 dark:text-gray-100 px-4 py-2 rounded-lg font-medium transition-all duration-200;
   }
-  
+
   .card {
     @apply bg-white dark:bg-dark-800 rounded-xl shadow-sm border border-gray-200 dark:border-dark-700 p-6 transition-all duration-200;
   }
-  
+
   .input {
     @apply w-full px-3 py-2 border border-gray-300 dark:border-dark-600 rounded-lg bg-white dark:bg-dark-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
   }
@@ -37,7 +37,8 @@
     background-repeat: no-repeat;
     background-size: 1.25em 1.25em;
     padding-right: 2.75rem;
-    min-height: 44px; /* Better touch target for mobile */
+    min-height: 44px;
+    /* Better touch target for mobile */
   }
 
   .mobile-select:focus {
@@ -49,10 +50,66 @@
     @apply border-gray-400 dark:border-dark-500 shadow-sm;
   }
 
+  /* Quick filter buttons */
+  .quick-filter-btn {
+    @apply px-3 py-2 text-xs rounded-md border transition-colors cursor-pointer;
+    min-height: 36px;
+    touch-action: manipulation;
+  }
+
+  .quick-filter-btn:active {
+    @apply transform scale-95;
+  }
+
+  .quick-filter-btn.active {
+    @apply bg-primary-100 border-primary-300 text-primary-700 dark:bg-primary-900 dark:border-primary-700 dark:text-primary-300;
+  }
+
+  .quick-filter-btn.inactive {
+    @apply bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 dark:bg-dark-700 dark:border-dark-600 dark:text-gray-300 dark:hover:bg-dark-600;
+  }
+
+  /* Date picker button styling (without background arrow) */
+  /* Date picker button styles */
+  .date-picker-btn {
+    @apply px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-dark-800 dark:border-dark-600 dark:text-gray-300 dark:hover:bg-dark-700 transition-all duration-200 flex items-center justify-between min-h-[44px] touch-manipulation;
+  }
+
+  /* Modal animations */
+  @keyframes modalFadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .modal-enter {
+    animation: modalFadeIn 0.2s ease-out;
+  }
+
+  /* Backdrop blur effect */
+  .backdrop-blur-sm {
+    backdrop-filter: blur(4px);
+  }
+
+  .date-picker-btn:focus {
+    @apply ring-2 ring-primary-500 border-primary-500 shadow-md;
+  }
+
+  .date-picker-btn:hover {
+    @apply border-gray-400 dark:border-dark-500 shadow-sm;
+  }
+
   /* Style the select options for better mobile experience */
   .mobile-select option {
     @apply bg-white dark:bg-dark-700 text-gray-900 dark:text-gray-100 py-2 px-3;
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
+    /* Prevents zoom on iOS */
     line-height: 1.5;
   }
 

@@ -30,7 +30,7 @@ export const metadata = {
     icon: '/icons/icon.png',  // ✅ direct path from /public
     shortcut: '/favicon.ico',
     apple: [
-      { url: '/icons/icon-72x72.png', sizes: '72x72', type: 'image/png' },
+      { url: '/icons/icon.png', sizes: '72x72', type: 'image/png' },
     ],
   },
 

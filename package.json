@@ -15,7 +15,7 @@
     "@google/genai": "^1.15.0",
     "@supabase/auth-helpers-nextjs": "^0.8.7",
     "@supabase/auth-helpers-react": "^0.4.2",
-    "@supabase/supabase-js": "^2.38.4",
+    "@supabase/supabase-js": "^2.57.4",
     "autoprefixer": "^10.4.16",
     "date-fns": "^2.30.0",
     "lucide-react": "^0.294.0",
